@@ -1,5 +1,5 @@
 import { McpUseProvider, useWidget, type WidgetMetadata } from "mcp-use/react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { z } from "zod";
 import "./styles.css";
 
@@ -20,7 +20,7 @@ const propsSchema = z.object({
 
 export const widgetMetadata: WidgetMetadata = {
   description:
-    "Arduino circuit builder assistant with chat, code editor, components, and circuit preview",
+    "Minimal Arduino circuit workspace with code, logical schematic preview, and components",
   props: propsSchema,
   exposeAsTool: false,
   metadata: {
@@ -30,7 +30,10 @@ export const widgetMetadata: WidgetMetadata = {
 };
 
 type Props = z.infer<typeof propsSchema>;
-type HighlightToken = { text: string; kind: "plain" | "keyword" | "number" | "comment" | "preprocessor" };
+type HighlightToken = {
+  text: string;
+  kind: "plain" | "keyword" | "number" | "comment" | "preprocessor";
+};
 
 const keywords = new Set([
   "void",
@@ -69,9 +72,7 @@ function highlightLine(line: string): HighlightToken[] {
     return [{ text: line, kind: "preprocessor" }];
   }
 
-  const parts = line.split(/(\s+|\b)/);
-
-  return parts.map((part) => {
+  return line.split(/(\s+|\b)/).map((part) => {
     if (keywords.has(part)) {
       return { text: part, kind: "keyword" };
     }
@@ -85,8 +86,7 @@ function highlightLine(line: string): HighlightToken[] {
 }
 
 export default function ArduinoCircuitBuilderWidget() {
-  const { props, isPending, sendFollowUpMessage } = useWidget<Props>();
-  const [chatInput, setChatInput] = useState("");
+  const { props, isPending } = useWidget<Props>();
 
   const highlightedCode = useMemo(
     () => (isPending ? [] : props.code.split("\n").map((line) => highlightLine(line))),
@@ -97,36 +97,27 @@ export default function ArduinoCircuitBuilderWidget() {
     return (
       <McpUseProvider autoSize>
         <div className="acb-root">
-          <div className="acb-loading">Loading Arduino circuit builder...</div>
+          <div className="acb-loading">Loading Arduino circuit workspace...</div>
         </div>
       </McpUseProvider>
     );
   }
 
-  const onSendMessage = () => {
-    const message = chatInput.trim();
-
-    if (!message) {
-      return;
-    }
-
-    sendFollowUpMessage(message);
-    setChatInput("");
-  };
+  const diagramComponents = props.components.slice(0, 4);
 
   return (
     <McpUseProvider autoSize>
       <div className="acb-root">
         <header className="acb-header">
           <div>
-            <h1>Arduino Circuit Builder Assistant</h1>
-            <p>Build circuits in natural language and review generated code and parts.</p>
+            <h1>Arduino Circuit Workspace</h1>
+            <p>{props.prompt}</p>
           </div>
           <span className="acb-badge">{props.filename}</span>
         </header>
 
         <div className="acb-layout">
-          <aside className="acb-sidebar">
+          <aside className="acb-sidebar card">
             <h2>Components</h2>
             <ul>
               {props.components.map((component) => (
@@ -136,67 +127,81 @@ export default function ArduinoCircuitBuilderWidget() {
                     <span>Qty {component.qty}</span>
                   </div>
                   <a href={component.purchaseUrl} target="_blank" rel="noreferrer">
-                    Purchase
+                    Buy
                   </a>
                 </li>
               ))}
             </ul>
           </aside>
 
-          <section className="acb-main">
-            <div className="acb-chat card">
-              <h2>Chat</h2>
-              <p className="acb-muted">Latest request: {props.prompt}</p>
-              <div className="acb-chat-controls">
-                <textarea
-                  value={chatInput}
-                  onChange={(event) => setChatInput(event.target.value)}
-                  placeholder="Describe your Arduino circuit goals..."
-                  rows={4}
-                />
-                <button type="button" onClick={onSendMessage}>
-                  Send
-                </button>
-              </div>
-            </div>
-
-            <div className="acb-code card">
+          <section className="acb-code card">
+            <div className="acb-section-head">
               <h2>.ino Code</h2>
-              <pre>
-                {highlightedCode.map((tokens, lineIndex) => (
-                  <div key={`line-${lineIndex}`}>
-                    {tokens.map((token, tokenIndex) => (
-                      <span key={`token-${lineIndex}-${tokenIndex}`} className={`acb-token-${token.kind}`}>
-                        {token.text}
-                      </span>
-                    ))}
-                  </div>
-                ))}
-              </pre>
+              <span className="acb-chip">Generated</span>
             </div>
+            <pre>
+              {highlightedCode.map((tokens, lineIndex) => (
+                <div key={`line-${lineIndex}`}>
+                  {tokens.map((token, tokenIndex) => (
+                    <span
+                      key={`token-${lineIndex}-${tokenIndex}`}
+                      className={`acb-token-${token.kind}`}
+                    >
+                      {token.text}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </pre>
           </section>
 
           <section className="acb-preview card">
-            <h2>{props.diagramTitle}</h2>
-            <svg viewBox="0 0 520 240" role="img" aria-label="Circuit diagram preview">
-              <rect x="20" y="85" width="150" height="80" rx="8" className="acb-diagram-board" />
-              <text x="95" y="132" textAnchor="middle" className="acb-diagram-label">
+            <div className="acb-section-head">
+              <h2>{props.diagramTitle}</h2>
+              <div className="acb-legend">
+                <span className="acb-legend-item acb-legend-power">VCC</span>
+                <span className="acb-legend-item acb-legend-ground">GND</span>
+                <span className="acb-legend-item acb-legend-signal">SIG</span>
+              </div>
+            </div>
+
+            <svg viewBox="0 0 560 290" role="img" aria-label="Logical circuit schematic preview">
+              <line x1="30" y1="40" x2="530" y2="40" className="acb-wire-power" />
+              <text x="34" y="30" className="acb-diagram-note">VCC</text>
+
+              <line x1="30" y1="250" x2="530" y2="250" className="acb-wire-ground" />
+              <text x="34" y="271" className="acb-diagram-note">GND</text>
+
+              <rect x="40" y="95" width="170" height="105" rx="8" className="acb-diagram-board" />
+              <text x="125" y="132" textAnchor="middle" className="acb-diagram-label">
                 Arduino Uno
               </text>
+              <text x="125" y="154" textAnchor="middle" className="acb-diagram-note">
+                D13 / 5V / GND
+              </text>
 
-              {props.components.slice(0, 3).map((component, index) => {
-                const y = 40 + index * 70;
+              {diagramComponents.map((component, index) => {
+                const y = 76 + index * 48;
+                const signalY = y + 20;
                 return (
                   <g key={`diagram-${component.name}`}>
-                    <rect x="350" y={y} width="145" height="48" rx="8" className="acb-diagram-part" />
-                    <text x="422" y={y + 29} textAnchor="middle" className="acb-diagram-label">
+                    <rect x="360" y={y} width="165" height="40" rx="8" className="acb-diagram-part" />
+                    <text x="442" y={y + 24} textAnchor="middle" className="acb-diagram-label">
                       {component.name}
                     </text>
-                    <line x1="170" y1="125" x2="350" y2={y + 24} className="acb-diagram-wire" />
+
+                    <line x1="210" y1="148" x2="360" y2={signalY} className="acb-wire-signal" />
+
+                    <line x1="392" y1={y} x2="392" y2="40" className="acb-wire-power" />
+                    <line x1="493" y1={y + 40} x2="493" y2="250" className="acb-wire-ground" />
+
+                    <circle cx="392" cy={y} r="3" className="acb-node" />
+                    <circle cx="493" cy={y + 40} r="3" className="acb-node" />
                   </g>
                 );
               })}
             </svg>
+
             <ul>
               {props.diagramNotes.map((note) => (
                 <li key={note}>{note}</li>
