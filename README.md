@@ -1,214 +1,83 @@
-# ArduinoMCP
+# ArduinoMCP: The Future of Hardware Prototyping 🚀
 
-**AI infrastructure for hardware development.**
+> **ArduinoMCP is the world’s first AI co-pilot for the physical world.** We bridge the gap between imagination and hardware reality, removing the friction from Arduino development through the power of MCP (Model Context Protocol).
 
-> From text prompt to verified circuit, firmware, and shopping cart — in one conversation.
-
----
-
-## The Problem
-
-Hardware prototyping is broken. The workflow hasn't changed in 20 years.
-
-| Pain point | Impact |
-|---|---|
-| Scattered datasheets across 50+ vendor sites | 70% of dev time lost to search |
-| Manual wiring = missed resistors, fried boards | $2.4B/yr in prototype waste (hobbyist + edu) |
-| No code generation for embedded | Every project starts from zero |
-| BOM management is spreadsheet hell | Orders delayed by days, not minutes |
-
-**$48B global electronics prototyping market. Zero AI-native tools.**
+**Current status:** Functional MCP prototype with schema-driven workflow and mock integrations.
 
 ---
 
-## The Solution
+## ⚡️ The Problem
+Hardware development is currently stuck in the 2000s. Developers spend **70% of their time** searching for datasheets, debugging missing resistors, and fighting boilerplate code instead of building. 
 
-ArduinoMCP is an MCP server that turns any LLM into a hardware engineer. One natural-language prompt produces:
+**Prototyping is slow, error-prone, and documentation is scattered.**
 
-1. **Validated circuit schema** with safety checks
-2. **Firmware code** (`.ino`) with syntax highlighting
-3. **Interactive schematic** rendered in-chat
-4. **Priced BOM** with one-click vendor links
-5. **3D enclosure** (OpenSCAD) sized to the build
+## 💎 The Solution: ArduinoMCP
+ArduinoMCP brings **Generative AI to the Breadboard**. We automate the entire hardware lifecycle—from a simple text description to a verified circuit, functional firmware, and a curated shopping cart.
 
-All delivered as a rich widget inside ChatGPT — not a link, not a PDF, a live workspace.
-
----
-
-## How It Works
-
-```
-User: "Build me a temperature monitor with an LCD display"
-                        |
-              ArduinoMCP (MCP Server)
-                        |
-        +-------+-------+-------+-------+
-        |       |       |       |       |
-   generate  validate  write   search  order
-   _circuit  _circuit  _code   _parts  _parts
-        |       |       |       |       |
-        +-------+-------+-------+-------+
-                        |
-              Widget renders in ChatGPT
-              (code + schematic + BOM)
-```
-
-**11 tools. 1 unified circuit schema. Fully composable.**
+### 🎥 [Watch the Interactive Demo](http://localhost:3000/inspector)
+*(Run locally inside an MCP client like ChatGPT to see our custom React widgets in action)*
 
 ---
 
-## Market
+## 🛠 Product Showcase (Prototype Implemented)
 
-| Segment | Size |
-|---|---|
-| **TAM** — Global electronics prototyping & EDA tools | $48B |
-| **SAM** — Hobbyist, education, & indie hardware | $3.2B |
-| **SOM** — AI-assisted Arduino/ESP32 prototyping (Year 1) | $120M |
+### 1. **AI Circuit Builder (Dynamic UI)**
+Our signature **`arduino-circuit-builder`** widget is an all-in-one compact workspace designed for ChatGPT interactions.
+*   **Generative Firmware**: Generates starter `.ino` code scaffolds based on requirements and normalized circuit schema.
+*   **Visual Schematics**: Dynamic SVG previews of your wiring.
+*   **Automated BOM**: Instant parts list with Adafruit/Digikey links.
 
-### Who builds hardware today
-- 45M+ Arduino boards sold (cumulative)
-- 2.1M monthly active users on Arduino forums
-- 300K+ new STEM lab setups annually (US + EU)
-- Fastest-growing segment: AI + IoT edge devices
+### 2. **Intelligent Component Discovery**
+*   **Metadata-Rich Search (Mock Data)**: Supports query/filter flow (price, stock) with structured component outputs.
+*   **Datasheet Lookup (Mock Data)**: Returns datasheet links and key electrical specs in normalized format.
 
----
+### 3. **Synthesis & Validation**
+*   **Natural Language Synthesis**: Translates requests into a normalized `CircuitSchema` (parts, nets, pin map, constraints).
+*   **Safety Auditing (Rule-based Prototype)**: Checks common issues such as missing LED resistors, floating nets, voltage mismatch, and pin short risks.
 
-## Product
-
-### Core: AI Circuit Builder Widget
-
-A ChatGPT-native workspace that appears inline — no context switching, no tab hopping.
-
-| Feature | Status |
-|---|---|
-| Natural-language circuit generation | Shipped |
-| Rule-based safety validation (voltage, shorts, floating nets) | Shipped |
-| Syntax-highlighted `.ino` code generation | Shipped |
-| Interactive SVG schematic with VCC/GND rails | Shipped |
-| Component search (11 parts, filterable by category/price) | Shipped |
-| Instant datasheet lookup with key specs | Shipped |
-| BOM export with Adafruit/DigiKey/Mouser links | Shipped |
-| 3D enclosure generation (OpenSCAD) | Shipped |
-| Photo-to-schema circuit analysis | Shipped |
-| Project export (ZIP/PDF/GitHub) | Shipped |
-| Improvement suggestions (power, components, code) | Shipped |
-
-### Architecture
-
-```
-mcp-use (MCP Server Framework)
-    |
-    +-- 11 tools (TypeScript, Zod-validated I/O)
-    +-- 2 widgets (React 19, Tailwind CSS 4)
-    +-- 1 shared CircuitSchema (parts, nets, pin_map, constraints, power)
-```
-
-Every tool reads and writes the same normalized schema. Tools compose — `generate_circuit` feeds `validate_circuit` feeds `write_arduino_code` feeds `order_parts`.
+### 4. **Vision-Assisted Analysis**
+*   **Photo-Assisted Drafting (Prototype)**: Accepts image references and returns inferred components/dimensions plus a draft circuit schema.
 
 ---
 
-## Competitive Landscape
+## 📈 Roadmap: Scaling to the Physical Edge
 
-| | ArduinoMCP | Fritzing | Tinkercad | Arduino IDE | Wokwi |
-|---|---|---|---|---|---|
-| AI-native (works inside LLM) | Yes | No | No | No | No |
-| Natural language input | Yes | No | No | No | No |
-| Code + schematic + BOM in one view | Yes | Partial | Partial | No | Partial |
-| Safety validation | Yes | No | No | No | No |
-| Vendor links & pricing | Yes | No | No | No | No |
-| Zero install | Yes | No | Yes | No | Yes |
-
-**Moat: First MCP server for hardware. Network effects compound as community contributes component libraries and circuit templates.**
+- [x] **Phase 1: Foundation (Hackathon)** – Core toolset, modular engine, shared data model (`CircuitSchema`), and React widgets.
+- [ ] **Phase 2: Live Supply APIs** – Direct API integration with DigiKey, Mouser, and Farnell for real-time stock and checkout.
+- [ ] **Phase 3: True 3D Artifact Pipeline** – Upgrade from OpenSCAD/STL references to generated downloadable artifacts.
+- [ ] **Phase 4: Compile/Upload Validation** – Add board/FQBN-aware compile checks and upload instruction validation.
+- [ ] **Phase 5: Project Packaging** – Produce downloadable ZIP bundles including sketch + schema + BOM + enclosure assets.
 
 ---
 
-## Business Model
-
-| Revenue stream | Model |
-|---|---|
-| **Free tier** | 10 generations/month, community components |
-| **Pro** ($19/mo) | Unlimited generations, live vendor APIs, priority support |
-| **Team** ($49/seat/mo) | Shared projects, BOM approvals, org component library |
-| **Enterprise** | Custom integrations, private component DBs, SLA |
-
-### Expansion vectors
-- Live supply chain APIs (DigiKey, Mouser, Farnell) — real-time stock & checkout
-- Multi-target: ESP32, Raspberry Pi Pico, custom PCBs
-- CAD/CAM automation: PCB layout, Gerber export
-- Compile & upload validation
+## 🏗 Built on Modern Infrastructure
+ArduinoMCP is built to move fast. No legacy bloat.
+- **Engine**: [mcp-use](https://github.com/mcp-use/mcp-use) (HMR-enabled MCP server framework)
+- **Frontend**: React 19 + Tailwind CSS 4 (Vibrant, Responsive, Clean for Chatbot UI)
+- **Validation**: Zod (schema-based tool input/output)
+- **Deployment**: Manufact Cloud / Vercel
 
 ---
 
-## Traction & Milestones
+## 🚀 Getting Started (LP/Investor Demo)
 
-| Milestone | Status |
-|---|---|
-| 11 MCP tools built and functional | Done |
-| 2 custom React widgets (circuit builder + product search) | Done |
-| Schema-driven architecture (single source of truth) | Done |
-| Safety validation engine (4 rule categories) | Done |
-| Hackathon MVP — full generate-validate-code-order pipeline | Done |
+1. **Install Dependencies**:
+   ```bash
+   cd ArduinoMCP
+   npm install
+   ```
 
-### Next 90 days
-- [ ] Connect live vendor APIs (DigiKey, Mouser)
-- [ ] Launch on ChatGPT Plugin/MCP marketplace
-- [ ] 500 beta users from Arduino/maker communities
-- [ ] Add ESP32 + Raspberry Pi Pico targets
+2. **Start the Engine**:
+   ```bash
+   npm run dev
+   ```
 
----
-
-## Technology
-
-| Layer | Stack |
-|---|---|
-| Runtime | mcp-use (MCP server framework with HMR) |
-| Language | TypeScript (strict mode) |
-| Validation | Zod (schema-first, runtime-safe) |
-| UI | React 19 + Tailwind CSS 4 |
-| Widgets | ChatGPT-native via MCP Apps protocol |
-| Deploy | Manufact Cloud / Vercel |
-
-### What makes it hard to replicate
-- **CircuitSchema**: Normalized data model shared across all 11 tools — every tool composes cleanly
-- **Widget protocol**: Custom React components rendered inside ChatGPT, not external links
-- **Domain rules**: Electrical safety validation (voltage domains, current limiting, floating nets) encoded in the tool layer
+3. **Explore the Workspace**:
+   Navigate to [http://localhost:3000/inspector](http://localhost:3000/inspector) to interact with the future of hardware.
 
 ---
 
-## Team
+### **Join the ArduinoMCP Team**
+We are currently in the prototyping phase, building the tools that will power the next generation of hardware innovators. 
 
-Built at the Manufact Hackathon, Feb 2026.
-
-We are builders who ship fast, think in schemas, and believe hardware development deserves the same AI revolution that software got.
-
----
-
-## The Ask
-
-Seed round to take ArduinoMCP from hackathon prototype to production MCP server on the ChatGPT marketplace.
-
-**Use of funds:**
-- Live vendor API integrations (DigiKey, Mouser, Farnell)
-- Multi-target support (ESP32, RPi Pico, custom PCB)
-- Community & marketplace launch
-- Hire: 1 embedded systems engineer, 1 full-stack
-
----
-
-## Get Started
-
-```bash
-cd ArduinoMCP
-npm install
-npm run dev
-```
-
-Open [localhost:3000/inspector](http://localhost:3000/inspector) to see the widget in action.
-
-```bash
-npm run deploy   # Ship to production
-```
-
----
-
-**ArduinoMCP — Build hardware at the speed of thought.**
+**ArduinoMCP: Build at the speed of thought.** ⚡️
