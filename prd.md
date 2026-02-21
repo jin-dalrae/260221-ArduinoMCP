@@ -1,4 +1,4 @@
-# Product Requirements Document (PRD): Antigravity Arduino MCP
+# Product Requirements Document (PRD): ArduinoMCP
 
 ## Current Stage
 Lean MVP focused on one reliable flow inside ChatGPT.

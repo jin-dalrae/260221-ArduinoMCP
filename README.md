@@ -1,4 +1,4 @@
-# Antigravity Arduino MCP
+# ArduinoMCP
 
 Lean MCP app for Arduino prototyping in ChatGPT.
 

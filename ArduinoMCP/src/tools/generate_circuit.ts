@@ -172,7 +172,7 @@ export const registerGenerateCircuit = (server: MCPServer) => {
             // ── Build full CircuitSchema ──
             const schema: CircuitSchema = {
                 version: "1.0",
-                project_name: "antigravity-arduino-project",
+                project_name: "arduino-mcp-project",
                 description: desc,
                 power: {
                     input_voltage_v: inputV,

@@ -33,7 +33,7 @@ export const constraintSchema = z.object({
 
 export const circuitSchema = z.object({
   version: z.string().default("1.0"),
-  project_name: z.string().default("antigravity-arduino-project"),
+  project_name: z.string().default("arduino-mcp-project"),
   description: z.string().default("General-purpose Arduino circuit"),
   power: z.object({
     input_voltage_v: z.number().default(5),
@@ -82,7 +82,7 @@ export function createDefaultCircuitSchema(params?: {
 
   return {
     version: "1.0",
-    project_name: "antigravity-arduino-project",
+    project_name: "arduino-mcp-project",
     description: params?.description ?? "General-purpose Arduino circuit",
     power: {
       input_voltage_v: inputVoltage,
