@@ -110,6 +110,7 @@ const ProductSearchResult: React.FC = () => {
   const { props, isPending, sendFollowUpMessage } = useWidget<ProductSearchResultProps>();
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ x: number; y: number } | null>(null);
+  const viewSeedRef = useRef<string | null>(null);
 
   const [cameraLat, setCameraLat] = useState(0);
   const [cameraLng, setCameraLng] = useState(0);
@@ -130,14 +131,20 @@ const ProductSearchResult: React.FC = () => {
   const markers = props?.markers ?? [];
 
   const details = detailsData?.structuredContent as LandmarkDetails | undefined;
+  const viewSeed = `${focus}|${camera.lat}|${camera.lng}|${camera.fov}|${markers
+    .map((marker) => marker.id)
+    .join(",")}`;
 
   useEffect(() => {
     if (!props) return;
+    if (viewSeedRef.current === viewSeed) return;
+    viewSeedRef.current = viewSeed;
     setCameraLat(camera.lat);
     setCameraLng(camera.lng);
     setFov(camera.fov);
     setSelectedId(markers[0]?.id ?? null);
-  }, [camera.fov, camera.lat, camera.lng, markers, props]);
+    setIsAutoRotate(true);
+  }, [camera.fov, camera.lat, camera.lng, markers, props, viewSeed]);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -296,7 +303,7 @@ const ProductSearchResult: React.FC = () => {
             <>
               <h3>{details.name}</h3>
               <p className="meta">
-                {details.country} · {details.type}
+                {details.country || "Unknown"} · {details.type || "place"}
               </p>
               <p className="meta">
                 {details.lat.toFixed(4)}, {details.lng.toFixed(4)}

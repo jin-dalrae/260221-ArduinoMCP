@@ -12,8 +12,8 @@ export const propSchema = z.object({
     z.object({
       id: z.string(),
       name: z.string(),
-      country: z.string(),
-      type: z.string(),
+      country: z.string().optional(),
+      type: z.string().optional(),
       lat: z.number(),
       lng: z.number(),
     })

@@ -93,6 +93,9 @@ const landmarks = [
   },
 ];
 
+type Landmark = (typeof landmarks)[number];
+const googleLandmarks = new Map<string, Landmark>();
+
 server.tool(
   {
     name: "open-concave-earth",
@@ -103,6 +106,21 @@ server.tool(
         .string()
         .optional()
         .describe("Optional keyword to prioritize landmarks in the initial view"),
+      markers: z
+        .array(
+          z.object({
+            id: z.string().optional().describe("Stable id from Google Maps"),
+            name: z.string().describe("Place name"),
+            lat: z.number().describe("Latitude"),
+            lng: z.number().describe("Longitude"),
+            country: z.string().optional().describe("Country name"),
+            type: z.string().optional().describe("Category such as city/place/store"),
+          })
+        )
+        .optional()
+        .describe(
+          "Optional marker list from another MCP server (for example Google Maps MCP)."
+        ),
     }),
     widget: {
       name: "product-search-result",
@@ -110,8 +128,31 @@ server.tool(
       invoked: "Concave Earth ready",
     },
   },
-  async ({ focus }) => {
-    const results = landmarks
+  async ({ focus, markers }) => {
+    let source: Landmark[] = landmarks;
+    googleLandmarks.clear();
+
+    if (markers && markers.length > 0) {
+      source = markers.map((item, index) => {
+        const id = item.id?.trim() || `google-${index}-${item.name.toLowerCase().replaceAll(" ", "-")}`;
+        const mapped: Landmark = {
+          id,
+          name: item.name,
+          country: item.country ?? "Unknown",
+          type: item.type ?? "place",
+          lat: item.lat,
+          lng: item.lng,
+          facts: [
+            "Imported from Google Maps MCP result set.",
+            "Projected onto the concave globe view using latitude/longitude.",
+          ],
+        };
+        googleLandmarks.set(id, mapped);
+        return mapped;
+      });
+    }
+
+    const results = source
       .filter((item) => {
         if (!focus) return true;
         const term = focus.toLowerCase();
@@ -123,7 +164,8 @@ server.tool(
       })
       .map(({ facts, ...marker }) => marker);
 
-    const initial = results[0] ?? landmarks[0];
+    const fallback = source[0] ?? landmarks[0];
+    const initial = results[0] ?? fallback;
 
     return widget({
       props: {
@@ -159,7 +201,7 @@ server.tool(
     }),
   },
   async ({ id }) => {
-    const found = landmarks.find((item) => item.id === id);
+    const found = googleLandmarks.get(id) ?? landmarks.find((item) => item.id === id);
     if (!found) {
       return object({
         id,
