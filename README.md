@@ -1,8 +1,43 @@
-# ArduinoMCP
+# ArduinoMCP: The Future of Hardware Prototyping 🚀
 
-Lean MCP app for Arduino prototyping in ChatGPT.
+> **ArduinoMCP is the world’s first AI co-pilot for the physical world.** We bridge the gap between imagination and hardware reality, removing the friction from Arduino development through the power of MCP (Model Context Protocol).
 
-## Current Code Scope (Active Tools)
+**Current status:** Functional MCP prototype with schema-driven workflow and mock integrations.
+
+---
+
+## ⚡️ The Problem
+Hardware development is currently stuck in the 2000s. Developers spend **70% of their time** searching for datasheets, debugging missing resistors, and fighting boilerplate code instead of building.
+
+**Prototyping is slow, error-prone, and documentation is scattered.**
+
+## 💎 The Solution: ArduinoMCP
+ArduinoMCP brings **Generative AI to the Breadboard**. We automate the hardware workflow from text intent to validated circuit, starter firmware, and parts planning.
+
+### 🎥 [Watch the Interactive Demo](http://localhost:3000/inspector)
+*(Run locally inside an MCP client like ChatGPT to see our custom React widget in action)*
+
+---
+
+## 🛠 Product Showcase (Prototype Implemented)
+
+### 1. **AI Circuit Builder (Dynamic UI)**
+Our signature **`arduino-circuit-builder`** widget is a compact workspace for ChatGPT interactions.
+- **Generative Firmware**: Starter `.ino` scaffolds based on requirements and normalized circuit schema.
+- **Visual Schematics**: Dynamic SVG circuit previews.
+- **Automated BOM View**: Parts list with purchase links.
+
+### 2. **Intelligent Component Discovery**
+- **Metadata-Rich Search (Mock Data)**: Query/filter flow (price, stock) with structured component outputs.
+- **Datasheet Lookup (Mock Data)**: Datasheet links and key electrical specs in normalized format.
+
+### 3. **Synthesis & Validation**
+- **Natural Language Synthesis**: Requests become normalized `CircuitSchema` (parts, nets, pin map, constraints).
+- **Safety Auditing (Rule-based Prototype)**: Missing resistor, floating net, voltage mismatch, short-risk checks.
+
+---
+
+## 🧭 Current Code Scope (Active Tools)
 Registered in `ArduinoMCP/src/index.ts`:
 
 1. `generate_circuit`
@@ -15,7 +50,9 @@ Registered in `ArduinoMCP/src/index.ts`:
 Deferred (present in codebase, not registered):
 - `search_emails`, `generate_3d_case`, `analyze_photo`, `suggest_improvements`, `export_project`
 
-## Concept Map
+---
+
+## 🗺 Concept Map
 
 ```text
 User Intent (ChatGPT)
@@ -50,7 +87,7 @@ User Intent (ChatGPT)
              +--------------------+
 ```
 
-## Process Map
+## 🔄 Process Map
 
 ### A) Main Build Flow
 ```text
@@ -76,15 +113,9 @@ ChatGPT message -> tool call write_arduino_code
                -> user continues conversation in ChatGPT (not inside widget)
 ```
 
-## Tool Roles (Current)
-- `generate_circuit`: Builds normalized schema from intent.
-- `validate_circuit`: Checks obvious electrical/design risks.
-- `write_arduino_code`: Generates starter firmware and returns workspace UI.
-- `search_components`: Filters candidate parts (prototype data shape).
-- `get_datasheet`: Returns datasheet URL + key specs summary.
-- `order_parts`: Produces vendor links + rough cost estimate from BOM/schema.
+---
 
-## Data Model Core
+## 🧱 Data Model Core
 Primary shared model: `CircuitSchema` in `ArduinoMCP/src/tools/circuit_schema.ts`.
 
 ```text
@@ -96,7 +127,27 @@ CircuitSchema
 - constraints[]
 ```
 
-## Run
+---
+
+## 📈 Roadmap: Scaling to the Physical Edge
+
+- [x] **Phase 1: Foundation (Hackathon)** – Core toolset, modular engine, shared data model (`CircuitSchema`), and React widget.
+- [ ] **Phase 2: Live Supply APIs** – Direct API integration with DigiKey, Mouser, and Farnell for real-time stock and checkout.
+- [ ] **Phase 3: True 3D Artifact Pipeline** – Upgrade from OpenSCAD/STL references to generated downloadable artifacts.
+- [ ] **Phase 4: Compile/Upload Validation** – Add board/FQBN-aware compile checks and upload instruction validation.
+- [ ] **Phase 5: Project Packaging** – Produce downloadable ZIP bundles including sketch + schema + BOM + enclosure assets.
+
+---
+
+## 🏗 Built on Modern Infrastructure
+- **Engine**: [mcp-use](https://github.com/mcp-use/mcp-use)
+- **Frontend**: React 19 + Tailwind CSS 4
+- **Validation**: Zod (schema-based tool input/output)
+- **Deployment**: Manufact Cloud / Vercel
+
+---
+
+## 🚀 Getting Started
 
 ```bash
 cd ArduinoMCP
@@ -107,9 +158,9 @@ npm run dev
 Open:
 - `http://localhost:3000/inspector`
 
-## Quick Demo Script (ChatGPT)
+---
 
-Use these prompts in order for a clean MVP demo:
+## Quick Demo Script (ChatGPT)
 
 1. Generate circuit
 ```text
@@ -140,3 +191,7 @@ Get datasheet details for LM7805 and summarize voltage, current, and pinout.
 ```text
 Create an order plan from this BOM using either vendor and estimate total cost.
 ```
+
+---
+
+<p align="center"><strong>ArduinoMCP: Build hardware at the speed of thought.</strong></p>
