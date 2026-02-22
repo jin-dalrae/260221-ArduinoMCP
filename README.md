@@ -149,6 +149,22 @@ CircuitSchema
 
 ## 🚀 Getting Started
 
+ For ChatGPT (web):                                                            
+  1. Go to chatgpt.com                   
+  2. Click Settings (bottom left) → MCP Tools (or Connected Apps)               
+  3. Click Add MCP Server                                                       
+  4. Paste: https://late-cloud-eqizx.run.mcp-use.com/mcp
+  5. Once connected, just chat normally - e.g. "Create an Arduino circuit for a temperature monitor with LED"
+  6. ChatGPT will call the tools and the widget renders inline in the chat
+
+  For Claude (web):
+  1. Go to claude.ai
+  2. Click Settings → Integrations or MCP
+  3. Add a new integration with the URL:
+  https://late-cloud-eqizx.run.mcp-use.com/mcp
+  To test it right now without ChatGPT/Claude:
+  - Open the Inspector directly in your browser:
+
 ```bash
 cd ArduinoMCP
 npm install
